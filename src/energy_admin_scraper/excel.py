@@ -11,7 +11,8 @@ def write_excel(monthly_df: pd.DataFrame, annual_df: pd.DataFrame, output_path: 
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
-    data_dictionary_df = build_data_dictionary()
+    available_columns = sorted(set(monthly_df.columns).union(set(annual_df.columns)))
+    data_dictionary_df = build_data_dictionary(available_columns)
 
     with pd.ExcelWriter(output_path, engine="openpyxl") as writer:
         monthly_df.to_excel(writer, sheet_name="monthly", index=False)
