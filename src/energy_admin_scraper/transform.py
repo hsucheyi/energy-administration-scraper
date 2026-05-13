@@ -10,128 +10,190 @@ MONTHLY_PATTERN = re.compile(r"^\d{4}/\d{2}$")
 ANNUAL_PATTERN = re.compile(r"^\d{4}$")
 
 
-TABLE_TITLE_COLUMNS = {
-    "全國": "3-02發電量（全國）_Electricity Generation (Nationwide)",
-    "台電": "3-02發電量（台電）_Electricity Generation (Taipower)",
-    "民營電廠": "3-02發電量（民營電廠）_Electricity Generation (IPP)",
-    "自用發電設備": "3-02發電量（自用發電設備）_Electricity Generation (Self-Use Power Generation Equipment)",
-}
-
-
-COLUMN_MAP = {
+COLUMN_MAPS = {
     "全國": {
-        "Column2": "total_gwh",
-        "Column3": "pumped_storage_gwh",
+        "Column2": "total",
+        "Column3": "pumped_storage",
         "Column4": "pumped_storage_share_pct",
-        "Column5": "thermal_total_gwh",
+        "Column5": "thermal_total",
         "Column6": "thermal_total_share_pct",
-        "Column7": "coal_gwh",
+        "Column7": "coal",
         "Column8": "coal_share_pct",
-        "Column9": "oil_gwh",
+        "Column9": "oil",
         "Column10": "oil_share_pct",
-        "Column11": "lng_gwh",
+        "Column11": "lng",
         "Column12": "lng_share_pct",
-        "Column13": "nuclear_gwh",
+        "Column13": "nuclear",
         "Column14": "nuclear_share_pct",
-        "Column15": "renewable_total_gwh",
+        "Column15": "renewable_total",
         "Column16": "renewable_total_share_pct",
-        "Column17": "hydro_gwh",
+        "Column17": "hydro",
         "Column18": "hydro_share_pct",
-        "Column19": "geothermal_gwh",
+        "Column19": "geothermal",
         "Column20": "geothermal_share_pct",
-        "Column21": "solar_pv_gwh",
+        "Column21": "solar_pv",
         "Column22": "solar_pv_share_pct",
-        "Column23": "wind_gwh",
+        "Column23": "wind",
         "Column24": "wind_share_pct",
-        "Column25": "biomass_gwh",
+        "Column25": "biomass",
         "Column26": "biomass_share_pct",
-        "Column27": "waste_gwh",
+        "Column27": "waste",
         "Column28": "waste_share_pct",
         "Column29": "period",
     },
     "台電": {
-        "Column2": "total_gwh",
+        "Column2": "total",
         "Column3": "total_share_pct",
-        "Column4": "pumped_storage_gwh",
+        "Column4": "pumped_storage",
         "Column5": "pumped_storage_share_pct",
-        "Column6": "thermal_total_gwh",
+        "Column6": "thermal_total",
         "Column7": "thermal_total_share_pct",
-        "Column8": "coal_gwh",
+        "Column8": "coal",
         "Column9": "coal_share_pct",
-        "Column10": "oil_gwh",
+        "Column10": "oil",
         "Column11": "oil_share_pct",
-        "Column12": "lng_gwh",
+        "Column12": "lng",
         "Column13": "lng_share_pct",
-        "Column14": "nuclear_gwh",
+        "Column14": "nuclear",
         "Column15": "nuclear_share_pct",
-        "Column16": "renewable_total_gwh",
+        "Column16": "renewable_total",
         "Column17": "renewable_total_share_pct",
-        "Column18": "hydro_gwh",
+        "Column18": "hydro",
         "Column19": "hydro_share_pct",
-        "Column20": "geothermal_gwh",
+        "Column20": "geothermal",
         "Column21": "geothermal_share_pct",
-        "Column22": "solar_pv_gwh",
+        "Column22": "solar_pv",
         "Column23": "solar_pv_share_pct",
-        "Column24": "wind_gwh",
+        "Column24": "wind",
         "Column25": "wind_share_pct",
         "Column26": "period",
     },
     "民營電廠": {
-        "Column2": "total_gwh",
+        "Column2": "total",
         "Column3": "total_share_pct",
-        "Column4": "thermal_total_gwh",
+        "Column4": "thermal_total",
         "Column5": "thermal_total_share_pct",
-        "Column6": "coal_gwh",
+        "Column6": "coal",
         "Column7": "coal_share_pct",
-        "Column8": "lng_gwh",
+        "Column8": "lng",
         "Column9": "lng_share_pct",
-        "Column10": "renewable_total_gwh",
+        "Column10": "renewable_total",
         "Column11": "renewable_total_share_pct",
-        "Column12": "hydro_gwh",
+        "Column12": "hydro",
         "Column13": "hydro_share_pct",
-        "Column14": "geothermal_gwh",
+        "Column14": "geothermal",
         "Column15": "geothermal_share_pct",
-        "Column16": "solar_pv_gwh",
+        "Column16": "solar_pv",
         "Column17": "solar_pv_share_pct",
-        "Column18": "wind_gwh",
+        "Column18": "wind",
         "Column19": "wind_share_pct",
         "Column20": "period",
+    },
+    "自用發電設備": {
+        "Column2": "total",
+        "Column3": "total_share_pct",
+        "Column4": "thermal_total",
+        "Column5": "thermal_total_share_pct",
+        "Column6": "coal",
+        "Column7": "coal_share_pct",
+        "Column8": "oil",
+        "Column9": "oil_share_pct",
+        "Column10": "lng",
+        "Column11": "lng_share_pct",
+        "Column12": "renewable_total",
+        "Column13": "renewable_total_share_pct",
+        "Column14": "hydro",
+        "Column15": "hydro_share_pct",
+        "Column16": "geothermal",
+        "Column17": "geothermal_share_pct",
+        "Column18": "solar_pv",
+        "Column19": "solar_pv_share_pct",
+        "Column20": "wind",
+        "Column21": "wind_share_pct",
+        "Column22": "biomass",
+        "Column23": "biomass_share_pct",
+        "Column24": "waste",
+        "Column25": "waste_share_pct",
+        "Column26": "period",
     },
 }
 
 
-def normalize_table(section_name: str, rows: list[dict[str, Any]]) -> pd.DataFrame:
-    title_col = TABLE_TITLE_COLUMNS.get(section_name)
-    column_map = COLUMN_MAP.get(section_name)
+def infer_roc_period_column(row: dict[str, Any]) -> str | None:
+    """
+    API 的第一欄名稱會隨資料表改變，例如：
+    - 3-02發電量（全國）_Electricity Generation (Nationwide)
+    - 3-03發電裝置容量（全國）_Installed Capacity (Nationwide)
 
-    if title_col is None or column_map is None:
+    但它通常不是 Column2, Column3...，所以可以用這個方式自動找出。
+    """
+    for key in row.keys():
+        if not key.startswith("Column"):
+            return key
+
+    return None
+
+
+def add_unit_suffix(column_name: str, value_unit: str) -> str:
+    """
+    將數值欄位依 dataset 單位加上 suffix：
+    - 3-02: total_gwh, coal_gwh
+    - 3-03: total_mw, coal_mw
+
+    share_pct 欄位維持不變。
+    """
+    if column_name in {"source_section", "roc_period", "period"}:
+        return column_name
+
+    if column_name.endswith("_share_pct"):
+        return column_name
+
+    return f"{column_name}_{value_unit.lower()}"
+
+
+def normalize_table(
+    section_name: str,
+    rows: list[dict[str, Any]],
+    value_unit: str,
+) -> pd.DataFrame:
+    column_map = COLUMN_MAPS.get(section_name)
+
+    if column_map is None:
+        return pd.DataFrame()
+
+    period_col = next((k for k, v in column_map.items() if v == "period"), None)
+
+    if period_col is None:
         return pd.DataFrame()
 
     records = []
 
     for row in rows:
-        period = row.get(column_map.get("Column29", "Column29")) or row.get("Column29")
-
-        # 不同區塊 period 欄位位置不同，所以從 mapping 反查
-        period_col = next((k for k, v in column_map.items() if v == "period"), None)
-        period = row.get(period_col) if period_col else None
+        period = row.get(period_col)
 
         if not isinstance(period, str):
             continue
 
+        # 只保留月頻與年頻。
+        # 3-02 的 YYYY/01-03 累計列、比較列會排除。
+        # 3-03 本來就沒有累計值，但也會排除比較列。
         if not (MONTHLY_PATTERN.match(period) or ANNUAL_PATTERN.match(period)):
             continue
 
+        roc_period_col = infer_roc_period_column(row)
+
         record = {
             "source_section": section_name,
-            "roc_period": row.get(title_col),
+            "roc_period": row.get(roc_period_col) if roc_period_col else None,
             "period": period,
         }
 
         for raw_col, clean_col in column_map.items():
             if clean_col == "period":
                 continue
-            record[clean_col] = row.get(raw_col)
+
+            clean_col_with_unit = add_unit_suffix(clean_col, value_unit)
+            record[clean_col_with_unit] = row.get(raw_col)
 
         records.append(record)
 
@@ -147,14 +209,22 @@ def normalize_table(section_name: str, rows: list[dict[str, Any]]) -> pd.DataFra
     return df
 
 
-def transform_payload(payload: dict[str, list[dict[str, Any]]]) -> tuple[pd.DataFrame, pd.DataFrame]:
+def transform_payload(
+    payload: dict[str, list[dict[str, Any]]],
+    value_unit: str = "GWh",
+) -> tuple[pd.DataFrame, pd.DataFrame]:
     frames = []
 
     for section_name, rows in payload.items():
         if not isinstance(rows, list):
             continue
 
-        df = normalize_table(section_name, rows)
+        df = normalize_table(
+            section_name=section_name,
+            rows=rows,
+            value_unit=value_unit,
+        )
+
         if not df.empty:
             frames.append(df)
 
