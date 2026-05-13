@@ -32,7 +32,10 @@ def main() -> None:
     payload = fetch_json(dataset["url"])
     raw_path = save_raw_json(payload, dataset["raw_dir"])
 
-    monthly_df, annual_df = transform_payload(payload)
+    monthly_df, annual_df = transform_payload(
+        payload,
+        value_unit=dataset.get("value_unit", "GWh"),
+    )
 
     output_path = Path(dataset["output_dir"]) / dataset["excel_file"]
     write_excel(monthly_df, annual_df, output_path)
