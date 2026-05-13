@@ -1,0 +1,48 @@
+name: Monthly Energy Administration API Scraper
+
+on:
+  schedule:
+    # Taiwan time: every month on the 15th at 09:15
+    # UTC time: every month on the 15th at 01:15
+    - cron: "15 1 15 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run scraper
+        run: |
+          PYTHONPATH=src python scripts/run_dataset.py --dataset zone_monthly_3_02
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add data/raw output
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Update Energy Administration API data"
+            git push
+          fi
