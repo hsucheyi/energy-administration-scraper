@@ -3,257 +3,211 @@ from __future__ import annotations
 import pandas as pd
 
 
-DATA_DICTIONARY_ROWS = [
-    {
-        "sheet": "monthly / annual",
-        "column_name": "source_section",
+BASE_DESCRIPTIONS = {
+    "source_section": {
         "description": "資料區塊名稱",
         "unit": "",
         "original_column": "",
         "note": "例如：全國、台電、民營電廠、自用發電設備",
     },
-    {
-        "sheet": "monthly / annual",
-        "column_name": "roc_period",
+    "roc_period": {
         "description": "民國年/月期間",
         "unit": "",
         "original_column": "各區塊第一欄",
-        "note": "例如：114年、01月、115年01-03月",
+        "note": "例如：114年、01月",
     },
-    {
-        "sheet": "monthly / annual",
-        "column_name": "period",
+    "period": {
         "description": "西元期間",
         "unit": "",
-        "original_column": "Column29 / Column26 / Column20 等",
+        "original_column": "各區塊 Period 欄位",
         "note": "monthly 為 YYYY/MM；annual 為 YYYY",
     },
-    {
-        "sheet": "monthly / annual",
-        "column_name": "total_gwh",
-        "description": "發電量總計",
-        "unit": "GWh",
+    "total": {
+        "description": "總計",
         "original_column": "依 source_section 而異",
         "note": "",
     },
-    {
-        "sheet": "monthly / annual",
-        "column_name": "total_share_pct",
-        "description": "發電量總計占比",
+    "total_share_pct": {
+        "description": "總計占比",
         "unit": "%",
         "original_column": "依 source_section 而異",
-        "note": "全國區塊通常沒有此欄；台電、民營電廠等區塊可能有",
+        "note": "部分區塊才有",
     },
-    {
-        "sheet": "monthly / annual",
-        "column_name": "pumped_storage_gwh",
-        "description": "抽蓄水力發電量",
-        "unit": "GWh",
+    "pumped_storage": {
+        "description": "抽蓄水力",
         "original_column": "依 source_section 而異",
         "note": "",
     },
-    {
-        "sheet": "monthly / annual",
-        "column_name": "pumped_storage_share_pct",
-        "description": "抽蓄水力發電占比",
+    "pumped_storage_share_pct": {
+        "description": "抽蓄水力占比",
         "unit": "%",
         "original_column": "依 source_section 而異",
         "note": "",
     },
-    {
-        "sheet": "monthly / annual",
-        "column_name": "thermal_total_gwh",
-        "description": "火力發電合計",
-        "unit": "GWh",
+    "thermal_total": {
+        "description": "火力合計",
         "original_column": "依 source_section 而異",
         "note": "",
     },
-    {
-        "sheet": "monthly / annual",
-        "column_name": "thermal_total_share_pct",
-        "description": "火力發電合計占比",
+    "thermal_total_share_pct": {
+        "description": "火力合計占比",
         "unit": "%",
         "original_column": "依 source_section 而異",
         "note": "",
     },
-    {
-        "sheet": "monthly / annual",
-        "column_name": "coal_gwh",
-        "description": "燃煤發電量",
-        "unit": "GWh",
+    "coal": {
+        "description": "燃煤",
         "original_column": "依 source_section 而異",
         "note": "",
     },
-    {
-        "sheet": "monthly / annual",
-        "column_name": "coal_share_pct",
-        "description": "燃煤發電占比",
+    "coal_share_pct": {
+        "description": "燃煤占比",
         "unit": "%",
         "original_column": "依 source_section 而異",
         "note": "",
     },
-    {
-        "sheet": "monthly / annual",
-        "column_name": "oil_gwh",
-        "description": "燃油發電量",
-        "unit": "GWh",
+    "oil": {
+        "description": "燃油",
         "original_column": "依 source_section 而異",
-        "note": "民營電廠區塊可能沒有此欄",
+        "note": "部分區塊可能沒有此欄",
     },
-    {
-        "sheet": "monthly / annual",
-        "column_name": "oil_share_pct",
-        "description": "燃油發電占比",
+    "oil_share_pct": {
+        "description": "燃油占比",
         "unit": "%",
         "original_column": "依 source_section 而異",
-        "note": "民營電廠區塊可能沒有此欄",
+        "note": "部分區塊可能沒有此欄",
     },
-    {
-        "sheet": "monthly / annual",
-        "column_name": "lng_gwh",
-        "description": "燃氣發電量",
-        "unit": "GWh",
+    "lng": {
+        "description": "燃氣",
         "original_column": "依 source_section 而異",
         "note": "原始表頭為燃氣 / LNG-Fired",
     },
-    {
-        "sheet": "monthly / annual",
-        "column_name": "lng_share_pct",
-        "description": "燃氣發電占比",
+    "lng_share_pct": {
+        "description": "燃氣占比",
         "unit": "%",
         "original_column": "依 source_section 而異",
         "note": "原始表頭為燃氣 / LNG-Fired",
     },
-    {
-        "sheet": "monthly / annual",
-        "column_name": "nuclear_gwh",
-        "description": "核能發電量",
-        "unit": "GWh",
+    "nuclear": {
+        "description": "核能",
         "original_column": "依 source_section 而異",
         "note": "",
     },
-    {
-        "sheet": "monthly / annual",
-        "column_name": "nuclear_share_pct",
-        "description": "核能發電占比",
+    "nuclear_share_pct": {
+        "description": "核能占比",
         "unit": "%",
         "original_column": "依 source_section 而異",
         "note": "",
     },
-    {
-        "sheet": "monthly / annual",
-        "column_name": "renewable_total_gwh",
-        "description": "再生能源發電合計",
-        "unit": "GWh",
+    "renewable_total": {
+        "description": "再生能源合計",
         "original_column": "依 source_section 而異",
         "note": "",
     },
-    {
-        "sheet": "monthly / annual",
-        "column_name": "renewable_total_share_pct",
-        "description": "再生能源發電合計占比",
+    "renewable_total_share_pct": {
+        "description": "再生能源合計占比",
         "unit": "%",
         "original_column": "依 source_section 而異",
         "note": "",
     },
-    {
-        "sheet": "monthly / annual",
-        "column_name": "hydro_gwh",
-        "description": "慣常水力發電量",
-        "unit": "GWh",
+    "hydro": {
+        "description": "慣常水力",
         "original_column": "依 source_section 而異",
         "note": "",
     },
-    {
-        "sheet": "monthly / annual",
-        "column_name": "hydro_share_pct",
-        "description": "慣常水力發電占比",
+    "hydro_share_pct": {
+        "description": "慣常水力占比",
         "unit": "%",
         "original_column": "依 source_section 而異",
         "note": "",
     },
-    {
-        "sheet": "monthly / annual",
-        "column_name": "geothermal_gwh",
-        "description": "地熱發電量",
-        "unit": "GWh",
+    "geothermal": {
+        "description": "地熱",
         "original_column": "依 source_section 而異",
         "note": "",
     },
-    {
-        "sheet": "monthly / annual",
-        "column_name": "geothermal_share_pct",
-        "description": "地熱發電占比",
+    "geothermal_share_pct": {
+        "description": "地熱占比",
         "unit": "%",
         "original_column": "依 source_section 而異",
         "note": "",
     },
-    {
-        "sheet": "monthly / annual",
-        "column_name": "solar_pv_gwh",
-        "description": "太陽光電發電量",
-        "unit": "GWh",
+    "solar_pv": {
+        "description": "太陽光電",
         "original_column": "依 source_section 而異",
         "note": "",
     },
-    {
-        "sheet": "monthly / annual",
-        "column_name": "solar_pv_share_pct",
-        "description": "太陽光電發電占比",
+    "solar_pv_share_pct": {
+        "description": "太陽光電占比",
         "unit": "%",
         "original_column": "依 source_section 而異",
         "note": "",
     },
-    {
-        "sheet": "monthly / annual",
-        "column_name": "wind_gwh",
-        "description": "風力發電量",
-        "unit": "GWh",
+    "wind": {
+        "description": "風力",
         "original_column": "依 source_section 而異",
-        "note": "原始資料註記：風力統計自 111 年 1 月起納入併聯試運轉發電量，部分月份可能波動較大",
+        "note": "",
     },
-    {
-        "sheet": "monthly / annual",
-        "column_name": "wind_share_pct",
-        "description": "風力發電占比",
+    "wind_share_pct": {
+        "description": "風力占比",
         "unit": "%",
         "original_column": "依 source_section 而異",
-        "note": "原始資料註記：風力統計自 111 年 1 月起納入併聯試運轉發電量，部分月份可能波動較大",
+        "note": "",
     },
-    {
-        "sheet": "monthly / annual",
-        "column_name": "biomass_gwh",
-        "description": "生質能發電量",
-        "unit": "GWh",
+    "biomass": {
+        "description": "生質能",
         "original_column": "依 source_section 而異",
         "note": "部分區塊可能沒有此欄",
     },
-    {
-        "sheet": "monthly / annual",
-        "column_name": "biomass_share_pct",
-        "description": "生質能發電占比",
+    "biomass_share_pct": {
+        "description": "生質能占比",
         "unit": "%",
         "original_column": "依 source_section 而異",
         "note": "部分區塊可能沒有此欄",
     },
-    {
-        "sheet": "monthly / annual",
-        "column_name": "waste_gwh",
-        "description": "廢棄物發電量",
-        "unit": "GWh",
+    "waste": {
+        "description": "廢棄物",
         "original_column": "依 source_section 而異",
         "note": "部分區塊可能沒有此欄",
     },
-    {
-        "sheet": "monthly / annual",
-        "column_name": "waste_share_pct",
-        "description": "廢棄物發電占比",
+    "waste_share_pct": {
+        "description": "廢棄物占比",
         "unit": "%",
         "original_column": "依 source_section 而異",
         "note": "部分區塊可能沒有此欄",
     },
-]
+}
 
 
-def build_data_dictionary() -> pd.DataFrame:
-    return pd.DataFrame(DATA_DICTIONARY_ROWS)
+def split_column_name(column_name: str) -> tuple[str, str]:
+    if column_name.endswith("_gwh"):
+        return column_name.removesuffix("_gwh"), "GWh"
+
+    if column_name.endswith("_mw"):
+        return column_name.removesuffix("_mw"), "MW"
+
+    return column_name, ""
+
+
+def build_data_dictionary(available_columns: list[str] | None = None) -> pd.DataFrame:
+    if available_columns is None:
+        available_columns = list(BASE_DESCRIPTIONS.keys())
+
+    rows = []
+
+    for column_name in available_columns:
+        base_name, inferred_unit = split_column_name(column_name)
+        meta = BASE_DESCRIPTIONS.get(base_name, {})
+
+        rows.append(
+            {
+                "sheet": "monthly / annual",
+                "column_name": column_name,
+                "description": meta.get("description", ""),
+                "unit": meta.get("unit", inferred_unit),
+                "original_column": meta.get("original_column", ""),
+                "note": meta.get("note", ""),
+            }
+        )
+
+    return pd.DataFrame(rows)
