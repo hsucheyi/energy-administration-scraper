@@ -6,3 +6,15 @@ datasets:
     output_dir: "output/zone_monthly_3_02"
     raw_dir: "data/raw/zone_monthly_3_02"
     excel_file: "electricity_generation_3_02.xlsx"
+    dataset_type: "electricity_generation"
+    value_unit: "GWh"
+
+  zone_monthly_3_03:
+    name: installed_capacity_3_03
+    description: "3-03 發電裝置容量"
+    url: "https://ea01.moeaea.gov.tw/a0303/02/api/v1/zone/monthly/3/3/"
+    output_dir: "output/zone_monthly_3_03"
+    raw_dir: "data/raw/zone_monthly_3_03"
+    excel_file: "installed_capacity_3_03.xlsx"
+    dataset_type: "installed_capacity"
+    value_unit: "MW"
