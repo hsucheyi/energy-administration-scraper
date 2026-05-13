@@ -1,11 +1,14 @@
 from __future__ import annotations
 
 import json
+import warnings
 from pathlib import Path
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
 import requests
+from requests.exceptions import SSLError
+from urllib3.exceptions import InsecureRequestWarning
 
 
 TAIPEI_TZ = ZoneInfo("Asia/Taipei")
@@ -21,9 +24,24 @@ def fetch_json(url: str, timeout: int = 60) -> dict:
         "Accept": "application/json,text/plain,*/*",
     }
 
-    response = requests.get(url, headers=headers, timeout=timeout)
-    response.raise_for_status()
-    return response.json()
+    try:
+        response = requests.get(url, headers=headers, timeout=timeout)
+        response.raise_for_status()
+        return response.json()
+
+    except SSLError:
+        print("SSL verification failed. Retrying with verify=False for this API endpoint.")
+
+        warnings.simplefilter("ignore", InsecureRequestWarning)
+
+        response = requests.get(
+            url,
+            headers=headers,
+            timeout=timeout,
+            verify=False,
+        )
+        response.raise_for_status()
+        return response.json()
 
 
 def save_raw_json(payload: dict, raw_dir: str | Path) -> Path:
