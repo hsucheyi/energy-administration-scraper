@@ -1,0 +1,8 @@
+datasets:
+  zone_monthly_3_02:
+    name: electricity_generation_3_02
+    description: "3-02 發電量"
+    url: "https://ea01.moeaea.gov.tw/a0303/02/api/v1/zone/monthly/3/2"
+    output_dir: "output/zone_monthly_3_02"
+    raw_dir: "data/raw/zone_monthly_3_02"
+    excel_file: "electricity_generation_3_02.xlsx"
