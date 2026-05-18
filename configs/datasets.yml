@@ -18,3 +18,13 @@ datasets:
     excel_file: "installed_capacity_3_03.xlsx"
     dataset_type: "installed_capacity"
     value_unit: "MW"
+
+  zone_monthly_4_01:
+    name: renewable_electricity_generation_4_01
+    description: "4-01 再生能源發電量"
+    url: "https://ea01.moeaea.gov.tw/a0303/02/api/v1/zone/monthly/4/1"
+    output_dir: "output/zone_monthly_4_01"
+    raw_dir: "data/raw/zone_monthly_4_01"
+    excel_file: "renewable_electricity_generation_4_01.xlsx"
+    dataset_type: "renewable_electricity_generation"
+    value_unit: "MWh"
