@@ -2,13 +2,12 @@ from __future__ import annotations
 
 import pandas as pd
 
-
 BASE_DESCRIPTIONS = {
     "source_section": {
         "description": "資料區塊名稱",
         "unit": "",
         "original_column": "",
-        "note": "例如：全國、台電、民營電廠、自用發電設備",
+        "note": "例如：全國、台電、民營電廠、自用發電設備、再生能源",
     },
     "roc_period": {
         "description": "民國年/月期間",
@@ -22,6 +21,7 @@ BASE_DESCRIPTIONS = {
         "original_column": "各區塊 Period 欄位",
         "note": "monthly 為 YYYY/MM；annual 為 YYYY",
     },
+
     "total": {
         "description": "總計",
         "original_column": "依 source_section 而異",
@@ -33,6 +33,7 @@ BASE_DESCRIPTIONS = {
         "original_column": "依 source_section 而異",
         "note": "部分區塊才有",
     },
+
     "pumped_storage": {
         "description": "抽蓄水力",
         "original_column": "依 source_section 而異",
@@ -44,6 +45,7 @@ BASE_DESCRIPTIONS = {
         "original_column": "依 source_section 而異",
         "note": "",
     },
+
     "thermal_total": {
         "description": "火力合計",
         "original_column": "依 source_section 而異",
@@ -55,6 +57,7 @@ BASE_DESCRIPTIONS = {
         "original_column": "依 source_section 而異",
         "note": "",
     },
+
     "coal": {
         "description": "燃煤",
         "original_column": "依 source_section 而異",
@@ -66,6 +69,7 @@ BASE_DESCRIPTIONS = {
         "original_column": "依 source_section 而異",
         "note": "",
     },
+
     "oil": {
         "description": "燃油",
         "original_column": "依 source_section 而異",
@@ -77,6 +81,7 @@ BASE_DESCRIPTIONS = {
         "original_column": "依 source_section 而異",
         "note": "部分區塊可能沒有此欄",
     },
+
     "lng": {
         "description": "燃氣",
         "original_column": "依 source_section 而異",
@@ -88,6 +93,7 @@ BASE_DESCRIPTIONS = {
         "original_column": "依 source_section 而異",
         "note": "原始表頭為燃氣 / LNG-Fired",
     },
+
     "nuclear": {
         "description": "核能",
         "original_column": "依 source_section 而異",
@@ -99,6 +105,7 @@ BASE_DESCRIPTIONS = {
         "original_column": "依 source_section 而異",
         "note": "",
     },
+
     "renewable_total": {
         "description": "再生能源合計",
         "original_column": "依 source_section 而異",
@@ -110,6 +117,7 @@ BASE_DESCRIPTIONS = {
         "original_column": "依 source_section 而異",
         "note": "",
     },
+
     "hydro": {
         "description": "慣常水力",
         "original_column": "依 source_section 而異",
@@ -121,6 +129,7 @@ BASE_DESCRIPTIONS = {
         "original_column": "依 source_section 而異",
         "note": "",
     },
+
     "geothermal": {
         "description": "地熱",
         "original_column": "依 source_section 而異",
@@ -132,6 +141,7 @@ BASE_DESCRIPTIONS = {
         "original_column": "依 source_section 而異",
         "note": "",
     },
+
     "solar_pv": {
         "description": "太陽光電",
         "original_column": "依 source_section 而異",
@@ -143,28 +153,99 @@ BASE_DESCRIPTIONS = {
         "original_column": "依 source_section 而異",
         "note": "",
     },
+
     "wind": {
         "description": "風力",
         "original_column": "依 source_section 而異",
-        "note": "",
+        "note": "3-02 / 3-03 使用",
     },
     "wind_share_pct": {
         "description": "風力占比",
         "unit": "%",
         "original_column": "依 source_section 而異",
-        "note": "",
+        "note": "3-02 / 3-03 使用",
     },
+
+    "wind_total": {
+        "description": "風力小計",
+        "original_column": "Column9",
+        "note": "4-01 使用",
+    },
+    "wind_total_share_pct": {
+        "description": "風力小計占比",
+        "unit": "%",
+        "original_column": "Column10",
+        "note": "4-01 使用",
+    },
+    "wind_onshore": {
+        "description": "陸域風力",
+        "original_column": "Column11",
+        "note": "4-01 使用",
+    },
+    "wind_onshore_share_pct": {
+        "description": "陸域風力占比",
+        "unit": "%",
+        "original_column": "Column12",
+        "note": "4-01 使用",
+    },
+    "wind_offshore": {
+        "description": "離岸風力",
+        "original_column": "Column13",
+        "note": "4-01 使用",
+    },
+    "wind_offshore_share_pct": {
+        "description": "離岸風力占比",
+        "unit": "%",
+        "original_column": "Column14",
+        "note": "4-01 使用",
+    },
+
     "biomass": {
         "description": "生質能",
         "original_column": "依 source_section 而異",
-        "note": "部分區塊可能沒有此欄",
+        "note": "3-02 / 3-03 使用",
     },
     "biomass_share_pct": {
         "description": "生質能占比",
         "unit": "%",
         "original_column": "依 source_section 而異",
-        "note": "部分區塊可能沒有此欄",
+        "note": "3-02 / 3-03 使用",
     },
+
+    "biomass_total": {
+        "description": "生質能小計",
+        "original_column": "Column15",
+        "note": "4-01 使用",
+    },
+    "biomass_total_share_pct": {
+        "description": "生質能小計占比",
+        "unit": "%",
+        "original_column": "Column16",
+        "note": "4-01 使用",
+    },
+    "biomass_solid": {
+        "description": "固態生質能",
+        "original_column": "Column17",
+        "note": "4-01 使用",
+    },
+    "biomass_solid_share_pct": {
+        "description": "固態生質能占比",
+        "unit": "%",
+        "original_column": "Column18",
+        "note": "4-01 使用",
+    },
+    "biomass_biogas": {
+        "description": "氣態生質能",
+        "original_column": "Column19",
+        "note": "4-01 使用；原始英文表頭為 Biogas",
+    },
+    "biomass_biogas_share_pct": {
+        "description": "氣態生質能占比",
+        "unit": "%",
+        "original_column": "Column20",
+        "note": "4-01 使用",
+    },
+
     "waste": {
         "description": "廢棄物",
         "original_column": "依 source_section 而異",
@@ -185,6 +266,9 @@ def split_column_name(column_name: str) -> tuple[str, str]:
 
     if column_name.endswith("_mw"):
         return column_name.removesuffix("_mw"), "MW"
+
+    if column_name.endswith("_mwh"):
+        return column_name.removesuffix("_mwh"), "MWh"
 
     return column_name, ""
 
