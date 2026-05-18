@@ -7,7 +7,7 @@ BASE_DESCRIPTIONS = {
         "description": "資料區塊名稱",
         "unit": "",
         "original_column": "",
-        "note": "例如：全國、台電、民營電廠、自用發電設備、再生能源",
+        "note": "例如：全國、台電、民營電廠、自用發電設備、再生能源、直轉供及躉售",
     },
     "roc_period": {
         "description": "民國年/月期間",
@@ -262,6 +262,77 @@ BASE_DESCRIPTIONS = {
         "description": "太陽能熱水器裝設面積",
         "original_column": "Column23",
         "note": "4-02 使用；原始欄位為太陽能熱水器裝設面積",
+    },
+
+    "direct_supply_solar_pv": {
+        "description": "直供予用戶：太陽光電",
+        "original_column": "Column3",
+        "note": "4-03 使用",
+    },
+    "wheeling_total": {
+        "description": "轉供予用戶：小計",
+        "original_column": "Column4",
+        "note": "4-03 使用",
+    },
+    "wheeling_hydro": {
+        "description": "轉供予用戶：慣常水力",
+        "original_column": "Column5",
+        "note": "4-03 使用",
+    },
+    "wheeling_solar_pv": {
+        "description": "轉供予用戶：太陽光電",
+        "original_column": "Column6",
+        "note": "4-03 使用",
+    },
+    "wheeling_wind": {
+        "description": "轉供予用戶：風力",
+        "original_column": "Column7",
+        "note": "4-03 使用",
+    },
+    "selling_to_renewable_retailer_total": {
+        "description": "售予再生能源售電業：小計",
+        "original_column": "Column8",
+        "note": "4-03 使用",
+    },
+    "selling_to_renewable_retailer_hydro": {
+        "description": "售予再生能源售電業：慣常水力",
+        "original_column": "Column9",
+        "note": "4-03 使用",
+    },
+    "selling_to_renewable_retailer_solar_pv": {
+        "description": "售予再生能源售電業：太陽光電",
+        "original_column": "Column10",
+        "note": "4-03 使用",
+    },
+    "selling_to_renewable_retailer_wind": {
+        "description": "售予再生能源售電業：風力",
+        "original_column": "Column11",
+        "note": "4-03 使用",
+    },
+    "selling_to_public_utility_total": {
+        "description": "躉售予公用售電業：小計",
+        "original_column": "Column12",
+        "note": "4-03 使用",
+    },
+    "selling_to_public_utility_hydro": {
+        "description": "躉售予公用售電業：慣常水力",
+        "original_column": "Column13",
+        "note": "4-03 使用",
+    },
+    "selling_to_public_utility_solar_pv": {
+        "description": "躉售予公用售電業：太陽光電",
+        "original_column": "Column14",
+        "note": "4-03 使用",
+    },
+    "selling_to_public_utility_wind": {
+        "description": "躉售予公用售電業：風力",
+        "original_column": "Column15",
+        "note": "4-03 使用",
+    },
+    "selling_to_public_utility_geothermal": {
+        "description": "躉售予公用售電業：地熱",
+        "original_column": "Column16",
+        "note": "4-03 使用",
     },
 }
 
