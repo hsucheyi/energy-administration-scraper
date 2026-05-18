@@ -5,10 +5,8 @@ from typing import Any
 
 import pandas as pd
 
-
 MONTHLY_PATTERN = re.compile(r"^\d{4}/\d{2}$")
 ANNUAL_PATTERN = re.compile(r"^\d{4}$")
-
 
 COLUMN_MAPS = {
     "全國": {
@@ -116,6 +114,64 @@ COLUMN_MAPS = {
         "Column25": "waste_share_pct",
         "Column26": "period",
     },
+
+    # 4-01 再生能源發電量
+    #
+    # API:
+    # https://ea01.moeaea.gov.tw/a0303/02/api/v1/zone/monthly/4/1
+    #
+    # 注意：
+    # - API 回傳同時包含「再生能源」與「再生能源 (季)」。
+    # - 目前本專案維持既有輸出邏輯，只輸出 monthly / annual。
+    # - 「再生能源 (季)」的季度資料目前會因 period 不是 YYYY/MM 或 YYYY 而被排除。
+    "再生能源": {
+        "Column2": "total",
+        "Column3": "hydro",
+        "Column4": "hydro_share_pct",
+        "Column5": "geothermal",
+        "Column6": "geothermal_share_pct",
+        "Column7": "solar_pv",
+        "Column8": "solar_pv_share_pct",
+        "Column9": "wind_total",
+        "Column10": "wind_total_share_pct",
+        "Column11": "wind_onshore",
+        "Column12": "wind_onshore_share_pct",
+        "Column13": "wind_offshore",
+        "Column14": "wind_offshore_share_pct",
+        "Column15": "biomass_total",
+        "Column16": "biomass_total_share_pct",
+        "Column17": "biomass_solid",
+        "Column18": "biomass_solid_share_pct",
+        "Column19": "biomass_biogas",
+        "Column20": "biomass_biogas_share_pct",
+        "Column21": "waste",
+        "Column22": "waste_share_pct",
+        "Column23": "period",
+    },
+    "再生能源 (季)": {
+        "Column2": "total",
+        "Column3": "hydro",
+        "Column4": "hydro_share_pct",
+        "Column5": "geothermal",
+        "Column6": "geothermal_share_pct",
+        "Column7": "solar_pv",
+        "Column8": "solar_pv_share_pct",
+        "Column9": "wind_total",
+        "Column10": "wind_total_share_pct",
+        "Column11": "wind_onshore",
+        "Column12": "wind_onshore_share_pct",
+        "Column13": "wind_offshore",
+        "Column14": "wind_offshore_share_pct",
+        "Column15": "biomass_total",
+        "Column16": "biomass_total_share_pct",
+        "Column17": "biomass_solid",
+        "Column18": "biomass_solid_share_pct",
+        "Column19": "biomass_biogas",
+        "Column20": "biomass_biogas_share_pct",
+        "Column21": "waste",
+        "Column22": "waste_share_pct",
+        "Column23": "period",
+    },
 }
 
 
@@ -124,13 +180,13 @@ def infer_roc_period_column(row: dict[str, Any]) -> str | None:
     API 的第一欄名稱會隨資料表改變，例如：
     - 3-02發電量（全國）_Electricity Generation (Nationwide)
     - 3-03發電裝置容量（全國）_Installed Capacity (Nationwide)
+    - 4-01再生能源發電量_Renewable energy electricity generation
 
     但它通常不是 Column2, Column3...，所以可以用這個方式自動找出。
     """
     for key in row.keys():
         if not key.startswith("Column"):
             return key
-
     return None
 
 
@@ -139,6 +195,7 @@ def add_unit_suffix(column_name: str, value_unit: str) -> str:
     將數值欄位依 dataset 單位加上 suffix：
     - 3-02: total_gwh, coal_gwh
     - 3-03: total_mw, coal_mw
+    - 4-01: total_mwh, solar_pv_mwh
 
     share_pct 欄位維持不變。
     """
@@ -174,9 +231,15 @@ def normalize_table(
         if not isinstance(period, str):
             continue
 
+        period = period.strip()
+
         # 只保留月頻與年頻。
-        # 3-02 的 YYYY/01-03 累計列、比較列會排除。
-        # 3-03 本來就沒有累計值，但也會排除比較列。
+        #
+        # 目前排除：
+        # - YYYY/01-03 累計列
+        # - Compared with ... 比較列
+        # - 註解列
+        # - 4-01 的季度列，例如 2025 Q1
         if not (MONTHLY_PATTERN.match(period) or ANNUAL_PATTERN.match(period)):
             continue
 
@@ -202,7 +265,11 @@ def normalize_table(
     if df.empty:
         return df
 
-    numeric_cols = [c for c in df.columns if c not in ["source_section", "roc_period", "period"]]
+    numeric_cols = [
+        c for c in df.columns
+        if c not in ["source_section", "roc_period", "period"]
+    ]
+
     for col in numeric_cols:
         df[col] = pd.to_numeric(df[col], errors="coerce")
 
