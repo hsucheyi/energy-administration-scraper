@@ -171,6 +171,26 @@ RENEWABLE_INSTALLED_CAPACITY_MAP = {
 }
 
 
+RENEWABLE_ENTERPRISE_SALES_MAP = {
+    "Column2": "total",
+    "Column3": "direct_supply_solar_pv",
+    "Column4": "wheeling_total",
+    "Column5": "wheeling_hydro",
+    "Column6": "wheeling_solar_pv",
+    "Column7": "wheeling_wind",
+    "Column8": "selling_to_renewable_retailer_total",
+    "Column9": "selling_to_renewable_retailer_hydro",
+    "Column10": "selling_to_renewable_retailer_solar_pv",
+    "Column11": "selling_to_renewable_retailer_wind",
+    "Column12": "selling_to_public_utility_total",
+    "Column13": "selling_to_public_utility_hydro",
+    "Column14": "selling_to_public_utility_solar_pv",
+    "Column15": "selling_to_public_utility_wind",
+    "Column16": "selling_to_public_utility_geothermal",
+    "Column17": "period",
+}
+
+
 def infer_roc_period_column(row: dict[str, Any]) -> str | None:
     """
     API 的第一欄名稱會隨資料表改變，例如：
@@ -178,6 +198,7 @@ def infer_roc_period_column(row: dict[str, Any]) -> str | None:
     - 3-03發電裝置容量（全國）_Installed Capacity (Nationwide)
     - 4-01再生能源發電量_Renewable energy electricity generation
     - 4-02再生能源裝(設)置容量_Renewable Energy Installed Capacity
+    - 4-03再生能源發電業直轉供及躉售_Renewable Electricity Generating Enterprise Sales
 
     但它通常不是 Column2, Column3...，所以可以用這個方式自動找出。
     """
@@ -190,9 +211,12 @@ def infer_roc_period_column(row: dict[str, Any]) -> str | None:
 def get_column_map(section_name: str, value_unit: str) -> dict[str, str] | None:
     """
     3-02 / 3-03 的 section_name 是「全國、台電、民營電廠、自用發電設備」。
+
     4-01 / 4-02 的 section_name 都是「再生能源」，但欄位不同：
     - 4-01 value_unit = MWh，Period 在 Column23
     - 4-02 value_unit = MW，Period 在 Column24，且 Column23 是太陽能熱水器面積
+
+    4-03 的 section_name 是「直轉供及躉售」，Period 在 Column17。
     """
     if section_name in POWER_GENERATION_SECTION_MAPS:
         return POWER_GENERATION_SECTION_MAPS[section_name]
@@ -206,6 +230,9 @@ def get_column_map(section_name: str, value_unit: str) -> dict[str, str] | None:
         if normalized_unit == "mw":
             return RENEWABLE_INSTALLED_CAPACITY_MAP
 
+    if section_name == "直轉供及躉售":
+        return RENEWABLE_ENTERPRISE_SALES_MAP
+
     return None
 
 
@@ -216,6 +243,7 @@ def add_unit_suffix(column_name: str, value_unit: str) -> str:
     - 3-03: total_mw, coal_mw
     - 4-01: total_mwh, solar_pv_mwh
     - 4-02: total_mw, solar_pv_mw
+    - 4-03: total_mwh, wheeling_total_mwh
 
     share_pct 欄位維持不變。
     已內含單位的特殊欄位，例如 solar_water_heater_area_1000m2，不再追加 MW。
