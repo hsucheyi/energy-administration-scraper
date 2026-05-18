@@ -109,13 +109,13 @@ BASE_DESCRIPTIONS = {
     "renewable_total": {
         "description": "再生能源合計",
         "original_column": "依 source_section 而異",
-        "note": "",
+        "note": "3-02 / 3-03 使用",
     },
     "renewable_total_share_pct": {
         "description": "再生能源合計占比",
         "unit": "%",
         "original_column": "依 source_section 而異",
-        "note": "",
+        "note": "3-02 / 3-03 使用",
     },
 
     "hydro": {
@@ -169,35 +169,35 @@ BASE_DESCRIPTIONS = {
     "wind_total": {
         "description": "風力小計",
         "original_column": "Column9",
-        "note": "4-01 使用",
+        "note": "4-01 / 4-02 使用",
     },
     "wind_total_share_pct": {
         "description": "風力小計占比",
         "unit": "%",
         "original_column": "Column10",
-        "note": "4-01 使用",
+        "note": "4-01 / 4-02 使用",
     },
     "wind_onshore": {
         "description": "陸域風力",
         "original_column": "Column11",
-        "note": "4-01 使用",
+        "note": "4-01 / 4-02 使用",
     },
     "wind_onshore_share_pct": {
         "description": "陸域風力占比",
         "unit": "%",
         "original_column": "Column12",
-        "note": "4-01 使用",
+        "note": "4-01 / 4-02 使用",
     },
     "wind_offshore": {
         "description": "離岸風力",
         "original_column": "Column13",
-        "note": "4-01 使用",
+        "note": "4-01 / 4-02 使用",
     },
     "wind_offshore_share_pct": {
         "description": "離岸風力占比",
         "unit": "%",
         "original_column": "Column14",
-        "note": "4-01 使用",
+        "note": "4-01 / 4-02 使用",
     },
 
     "biomass": {
@@ -215,35 +215,35 @@ BASE_DESCRIPTIONS = {
     "biomass_total": {
         "description": "生質能小計",
         "original_column": "Column15",
-        "note": "4-01 使用",
+        "note": "4-01 / 4-02 使用",
     },
     "biomass_total_share_pct": {
         "description": "生質能小計占比",
         "unit": "%",
         "original_column": "Column16",
-        "note": "4-01 使用",
+        "note": "4-01 / 4-02 使用",
     },
     "biomass_solid": {
         "description": "固態生質能",
         "original_column": "Column17",
-        "note": "4-01 使用",
+        "note": "4-01 / 4-02 使用",
     },
     "biomass_solid_share_pct": {
         "description": "固態生質能占比",
         "unit": "%",
         "original_column": "Column18",
-        "note": "4-01 使用",
+        "note": "4-01 / 4-02 使用",
     },
     "biomass_biogas": {
         "description": "氣態生質能",
         "original_column": "Column19",
-        "note": "4-01 使用；原始英文表頭為 Biogas",
+        "note": "4-01 / 4-02 使用；原始英文表頭為 Biogas",
     },
     "biomass_biogas_share_pct": {
         "description": "氣態生質能占比",
         "unit": "%",
         "original_column": "Column20",
-        "note": "4-01 使用",
+        "note": "4-01 / 4-02 使用",
     },
 
     "waste": {
@@ -257,6 +257,12 @@ BASE_DESCRIPTIONS = {
         "original_column": "依 source_section 而異",
         "note": "部分區塊可能沒有此欄",
     },
+
+    "solar_water_heater_area": {
+        "description": "太陽能熱水器裝設面積",
+        "original_column": "Column23",
+        "note": "4-02 使用；原始欄位為太陽能熱水器裝設面積",
+    },
 }
 
 
@@ -269,6 +275,9 @@ def split_column_name(column_name: str) -> tuple[str, str]:
 
     if column_name.endswith("_mwh"):
         return column_name.removesuffix("_mwh"), "MWh"
+
+    if column_name.endswith("_1000m2"):
+        return column_name.removesuffix("_1000m2"), "千平方公尺"
 
     return column_name, ""
 
