@@ -38,3 +38,13 @@ datasets:
     excel_file: "renewable_installed_capacity_4_02.xlsx"
     dataset_type: "renewable_installed_capacity"
     value_unit: "MW"
+
+  zone_monthly_4_03:
+    name: renewable_enterprise_sales_4_03
+    description: "4-03 再生能源發電業直轉供及躉售"
+    url: "https://ea01.moeaea.gov.tw/a0303/02/api/v1/zone/monthly/4/3/"
+    output_dir: "output/zone_monthly_4_03"
+    raw_dir: "data/raw/zone_monthly_4_03"
+    excel_file: "renewable_enterprise_sales_4_03.xlsx"
+    dataset_type: "renewable_enterprise_sales"
+    value_unit: "MWh"
