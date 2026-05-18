@@ -33,6 +33,7 @@ jobs:
         run: |
           PYTHONPATH=src python scripts/run_dataset.py --dataset zone_monthly_3_02
           PYTHONPATH=src python scripts/run_dataset.py --dataset zone_monthly_3_03
+          PYTHONPATH=src python scripts/run_dataset.py --dataset zone_monthly_4_01
 
       - name: Commit and push if changed
         run: |
